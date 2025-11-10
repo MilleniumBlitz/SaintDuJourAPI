@@ -43,7 +43,7 @@ def recuperer_url_image_saint_du_jour(page_web, nom_saint) -> str:
 async def recuperer_saints_du_jour(jour: datetime.date | None = None) -> list[Saint]:
 
     if jour is None:
-        jour = datetime.date.today
+        jour = datetime.date.today()
 
     logger.info('Lancement de la récupération des Saints du jour')
 
