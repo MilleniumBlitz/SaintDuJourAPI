@@ -3,7 +3,6 @@ import datetime
 import requests
 import logging
 from bs4 import BeautifulSoup
-from textwrap import wrap
 from unidecode import unidecode
 from babel.dates import format_date
 from pydantic import BaseModel
@@ -41,7 +40,11 @@ def recuperer_url_image_saint_du_jour(page_web, nom_saint) -> str:
     return page_web.find(alt=nom_saint, name="img")
 
 @app.get("/")
-async def recuperer_saints_du_jour(jour: datetime.date | None = datetime.date.today()) -> list[Saint]:
+async def recuperer_saints_du_jour(jour: datetime.date | None = None) -> list[Saint]:
+
+    if jour is None:
+        jour = datetime.date.today
+
     logger.info('Lancement de la récupération des Saints du jour')
 
     saints_du_jour = []
@@ -83,7 +86,6 @@ async def recuperer_saints_du_jour(jour: datetime.date | None = datetime.date.to
                     description_saint += element_texte
 
         saint_du_jour = Saint(nom=nom_saint, description=description_saint)
-
 
         # Recherche de l'image du Saint
         image = recuperer_url_image_saint_du_jour(html_parse, nom_saint)
